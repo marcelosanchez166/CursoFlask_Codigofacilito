@@ -1,0 +1,107 @@
+<!-- esta sera la plantilla que va a renderizar la vista index desde el archivo __init__.py  -->
+
+<!-- Para comenzar debemos hacer un extends de body.html -->
+{% extends './body.html' %}
+
+<!-- modificando el bloque title el cual tendra de titulo index -->
+{% block title %} 
+    Index 
+{% endblock %} 
+
+{% block CustomCSS %}
+<link href="{{url_for('static', filename='CSS/index.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block container %} 
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12"><!-- sirve para que se pueda mostrar el contenido dependiendo del tamaño del dispositivo, ya que bootstrap usa un sistema
+    de division de la pantalla en 12 espacios para que nosotros podamos asignar que un bloque tenga 3,4,6 hasta 12 espacios esto determina cuando espacio va a tomar la pagina cuando 
+    Se redimenciones -->
+        <h1> Libreria "La Torre de Papel" </h1>  
+        {% with messages = get_flashed_messages() %}<!-- Bloque que sirve para obtener los messages si hay los mostrara-->
+            {% if messages %}
+            <br/>
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong style="font-size: 14px;">{{ message }}</strong> <!-- en esta etiqueta mandamos a imprimir el msj que se envia desde la ruta logout  -->
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</div>
+
+<hr/>
+<div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <h2>{{ data.titulo }}</h2>
+    </div>
+    {% if current_user.tipo_usuario.id == 1 %}
+        {% if data.lista_Libros_vendidos | length > 0 %}
+        <!-- Aqui se mostraran al usuario admin la tabla de los libros vendidos-->
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                
+                <div class="table-responsive"><!-- La class="table-responsive" es para que sea responsiva la tabla  -->
+                    <table class="table table-striped"><!-- La class="table table-striped" es para que cada fila tenga un color intercalado  -->
+                        <thead><!-- Cabecera de la tabla -->
+                            <tr>
+                                <th>#</th><!-- Valores que se mostraran como indices en la tabla -->
+                                <th>Libro</th><!-- Valores que se mostraran como indices en la tabla -->
+                                <th>Unidades Vendidas</th><!-- Valores que se mostraran como indices en la tabla -->
+                                <th>Precio Unitario</th><!-- Valores que se mostraran como indices en la tabla -->
+                                <th>Total</th><!-- Valores que se mostraran como indices en la tabla -->
+                            </tr>
+                        </thead>
+                        <tbody><!-- Cuerpo de la tabla -->
+                            <!-- Se creara una variable con Jinja 2 que se sume conforme se recorra cada uno de los libros, que al inicio tenga el valor de cero y que luego se vaya sumando la cantidad de unidades vendidas por el precio  -->
+                            {% set contador = namespace(total = 0) %}<!--namespace es una palabra reservada de Jinja 2 que se utilizara para indicar un valor dentro total =0 al inicio  -->
+                            {% for l in data.lista_Libros_vendidos %}
+                                <tr>
+                                    <td> {{ loop.index }} </td><!-- Para enumerar todos los registros se usa una funcion de Jinja 2 loop.index -->
+                                    <td> {{ l.titulo }} </td><!-- Para mostrar el titulo del libro vendido -->
+                                    <td> {{ l.unidades_vendidas }} </td><!-- Para mostrar las unidades vendidas de cada libro -->
+                                    <td>$ {{ l.precio }} </td><!-- Para mostrar el precio del libro vendido -->
+                                    <td>$ {{ (l.precio * l.unidades_vendidas) }} </td><!-- Para Sacar el precio total de unidades vendidas  -->
+                                </tr>
+                            {% set contador.total = contador.total + (l.precio * l.unidades_vendidas) %}<!-- Conforme se hagan las iteraciones del ciclo for se accedera al valor total de la variable contador y hara la suma de contador.total + (l.precio * l.unidades_vendidas)  -->        
+                            {% endfor %}
+                                <tr>
+                                    <td colspan="4"></td><!-- El colspan nos ayudara a rellenar los espacios de la tabla de tal forma alinear el contador al final a la derecha de la tabla -->
+                                    <td>$ {{ contador.total }} </td><!-- Se mostrara la variable y su valor de la suma  realizada de las ventas  -->
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {%else%}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h2>A&uacute;n no existen libros vendidos... </h2>
+            </div>
+        {% endif %}
+    {% else %}
+        {% if data.Lista_Compras_libros | length > 0 %}
+            <!-- Aqui se mostraran al usuario cliente la tabla de los libros comprados-->
+            {% for c in data.Lista_Compras_libros %}
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4"><!-- esta clase de significa el tamaño que va a tomar la pagina o el contenedor mediante grillas medium(col-md-6) large(col-lg-4) extralarge(col-xl-4) -->
+                    <div class="card mb-4 shadow-sm">
+                        <!-- Se crea la variable url con la palabra reservada set para poder pasarla en la etiqueta img en el filename=url dicha variable contendra la ruta de cada una de las imagenes concatenando el isbn y el formato de cada una de las images cada vez que se recorra un libro atravez  del ciclo for   -->
+                        {% set url='img/portadas/' + c.libro_isbn.isbn + '.jpg'  %}
+                        <img src="{{ url_for('static', filename=url) }}" class="card-img-top" height="320" alt="{{ c.libro_isbn.titulo }}">
+                        <div class="car-body">
+                            <h5 class="card-title">{{ c.libro_isbn.titulo }} <span style="float: right ">${{c.libro_isbn.precio}}</span></h5>
+                            <p class="card-text"> Comprado: {{ c.formatted_date() }}</p>
+                        </div>
+                    </div>
+                </div>  
+            {% endfor %}
+        {%else%}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <h2>A&uacute;n no has comprado libros </h2>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %} 

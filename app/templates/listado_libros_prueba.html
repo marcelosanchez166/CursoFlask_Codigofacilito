@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <h1>{{ data.libros }}</h1> -->
+    <table>
+        {% for i in data.libros %}
+            <tr>
+<!-- Ya no accederemos por el indice de la tupla si no por el valor de la tabla libro -->
+                <td> {{ i.isbn }} </td>
+                <td> {{ i.titulo }} </td>
+                <td> {{ i.yearedicion }} </td>
+                <td> {{ i.autor_id.apellidos }} </td>
+                <td> {{ i.autor_id.nombres }} </td>
+                <td> {{ i.precio }} </td>
+                <!-- Creando tabla para que se muestren los valores en la plantilla listado_libros con los valores i[0] hasta el [2] 
+le indico que separe los valores de esta forma ya no lo mostrara como tupla -->
+                <!-- <td> {{ i[0] }} </td>
+                <td> {{ i[1] }} </td>
+                <td> {{ i[2] }} </td>
+                <td> {{ i[3] }} </td>
+                <td> {{ i[4] }} </td>
+                <td> {{ i[5] }} </td> -->
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

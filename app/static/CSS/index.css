@@ -1,0 +1,5 @@
+th,td{
+    /* PAra centrar los th y los td de la tabla donde se mostraran los libros vendidos */
+    text-align: center; 
+    vertical-align: middle;
+}

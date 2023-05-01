@@ -1,0 +1,1 @@
+#Este archivo va quedar vacio, esto lo hacemos para que la carpeta entities sea un paquete por eso se le creo su propio __init__.py

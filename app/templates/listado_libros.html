@@ -1,0 +1,42 @@
+{% extends './body.html' %} <!-- Heredando de la plantilla body.html -->
+
+{% block title %} 
+    Listado de libros
+{% endblock %}
+
+<!-- Usanddo el blocque container que esta en la plantilla body.html -->
+{% block container %}
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <h1>{{data.titulo}}</h1>
+        </div>
+    </div>
+
+<hr/>
+
+<!-- En este div mostraremos el listado de los libros mediante tarjetas de css bootstrap -->
+<div class="row">
+    {% for i in data.libros %}
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4"><!-- esta clase de significa el tamaño que va a tomar la pagina o el contenedor mediante grillas medium(col-md-6) large(col-lg-4) extralarge(col-xl-4) -->
+        <div class="card mb-4 shadow-sm">
+            <!-- Se crea la variable url con la palabra reservada set para poder pasarla en la etiqueta img en el filename=url dicha variable contendra la ruta de cada una de las imagenes concatenando el isbn y el formato de cada una de las images cada vez que se recorra un libro atravez  del ciclo for   -->
+            {% set url='img/portadas/' + i.isbn + '.jpg'  %}
+            <img src="{{ url_for('static', filename=url) }}" class="card-img-top" height="320" alt="{{ i.titulo }}">
+            <div class="car-body">
+                <h5 class="card-title">{{ i.titulo }} <span style="float: right ">${{i.precio}}</span></h5>
+                <p class="card-text">{{ i.autor_id.Nombre_Completo() }}</p>
+                <button id="{{ i.isbn }}" class="btn btn-block btn-primary btnComprarLibro ">Comprar</button><!-- Se le aplica la clase btnComprarLibro al boton para que referencia a cada uno de los botones y se le colocara un id="{{ i.isbn }}" para que cuando se precione el boton haga referencia al libro segun el isbn del libro como identificador unico -->
+            </div>
+        </div>
+    </div>  
+    {% endfor %}
+    <input type="hidden" name="csrf-token"  value="{{ csrf_token() }}">
+</div>
+{% endblock %}
+
+{% block CustomJS %}
+<!-- llamando al archivo de la libreria sweetalert -->
+    <script src="{{ url_for('static', filename='lib/sweetalert2/dist/sweetalert2.all.min.js') }}"></script><!-- llamando al archivo de la libreria sweetalert -->
+    <script src="{{ url_for('static', filename='js/notificacionSWAL.js') }}"></script><!-- llamando al archivo de la JS que se creo para hacer uso de la libreria sweetalert -->
+    <script src="{{ url_for('static', filename='js/listado_libro.js') }}"></script><!-- llamando al archivo que se creo donde se hace el consumo de la url(api) mediante fetch api -->
+{% endblock %}

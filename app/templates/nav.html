@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Tienda "De Libros"</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto" >
+                <li class="nav-item">
+                    <!-- En el href="{{ url_for('index') }}" indicamos con flask un url_for para que nos redirija hacia la ruta llamada index  del archivo __init__.py la cual posterioemente llama a la plantilla correspondiente para que se meustre -->
+                    <a class="nav-link active" aria-current="page" href="{{ url_for('index') }}">Index</a>
+                </li>
+                {% if current_user.tipo_usuario.id==2 %}<!-- En este if estoy condicionando que si el tipo de usuario no es igual a 2 que es el usuario cliente no se mostrara en la barra la redireccion hacia libros -->
+                    <li class="nav-item">
+                        <!-- En el href="{{ url_for('listar_libros') }}" indicamos con flask un url_for para que nos redirija hacia la ruta llamada index  del archivo __init__.py la cual posterioemente llama a la plantilla correspondiente para que se meustre -->
+                        <a class="nav-link" href="{{url_for('listar_libros')}}">Libros</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <!-- En el href="{{ url_for('logout') }}" indicamos con flask un url_for para que nos redirija hacia la ruta llamada index  del archivo __init__.py la cual posterioemente llama a la plantilla correspondiente para que se meustre -->
+                    <a class="nav-link" href="{{ url_for('logout') }}">Cerrar Sesi&oacute;n</a>
+                </li>
+                <!--<li class="nav-item">
+                    <a class="nav-link disabled">Disabled</a>
+                </li> -->
+            </ul>
+            <span class="navbar-text">
+                <strong>{{ current_user.Nombre_usuario }}</strong><!-- current_user es una variable propia de flask_loging para poder mostrar la sesion actual del usuario logueado en la app y el .Nombre_usuario es el usuario logueado que es un atributo de la clase Usuario en el archivo usuario.py -->
+                        ({{ current_user.tipo_usuario.nombre }})<!-- El current_user.tipo_usuario.nombre llama la variable de flask_login current_user y se instancia el atibuto tipo_usuario de la clase Usuario del archivo usuario.py que asu vez tiene instancia con el atributo nombre de la clase TipoUsuario en el archivo tipousuario.py  -->
+            </span>
+        </div>
+    </div>
+</nav>
