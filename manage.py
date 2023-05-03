@@ -1,5 +1,5 @@
 # pip install flask-script 
-#se instala ese paquete para podes gestionar de mejor manera la instancia del servidor de tal forma poder colocar en este archivo las configuraciones del servidor 
+#se instala ese paquete para poder gestionar de mejor manera la instancia del servidor de tal forma poder colocar en este archivo las configuraciones del servidor 
 
 #Se importa el manager de flask_script para poder gestionar las configs del server
 from flask_script import Manager,Server
