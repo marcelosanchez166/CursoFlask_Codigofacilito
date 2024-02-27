@@ -4,51 +4,55 @@
     Inicio de Sesion
 {% endblock %}
 
-{% block CustomCSS %}<!-- Este bloque esta creado en la plantilla base.html y lo llamo aca para no ponerlo en la plantilla base.html de esa forma solo afectara a la plantilla logn.html -->
-<link href="{{url_for('static', filename='CSS/login.css')}}" rel="stylesheet">
+{% block CustomCSS%}<!-- Este bloque esta creado en la plantilla base.html y lo llamo aca para no ponerlo en la plantilla base.html de esa forma solo afectara a la plantilla logn.html -->
+    <link href="{{url_for('static', filename='CSS/login.css')}}" rel="stylesheet">
 {% endblock %}
 
-{% block body %} <!-- En este bloque estoy creando el login traido de bootstrap para crear el login mas facil y rapido-->
-<!-- En la etiquete form estan dos atributos el action que sirve para saber a donde enviaremos los datos del formulario y el method que es el metodo por el que se enviaran los datos -->
-<form class="form-signin" action="/login" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><!--Este input generara el token para la seguridad de nuestros formularios-->
-    <img class="mb-4" src="{{url_for('static', filename='img/Flask_logo.svg')}}" alt="" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Inicio de Sesi&oacute;n</h1>
-    <label for="usuario" class="sr-only">usuario</label>
-    <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Nombre de Usuario" minlength="6" maxlength="20" required autofocus>
-    <br />
-    <label for="password" class="sr-only">Password</label>
-    <input type="password" id="password" name="password" class="form-control" placeholder="Password" minlength="6" maxlength="24" required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesi&oacute;n</button>
+{% block body %}
+    <!-- En este bloque estoy creando el login traido de bootstrap para crear el login mas facil y rapido-->
+    <!-- En la etiquete form estan dos atributos el action que sirve para saber a donde enviaremos los datos del formulario y el method que es el metodo por el que se enviaran los datos -->
+    <form class="form-signin" action="/login" method="POST">
+        <input type="hidden" name="csrf_token"
+            value="{{ csrf_token() }}"><!--Este input generara el token para la seguridad de nuestros formularios-->
+        <img class="mb-4" src="{{url_for('static', filename='img/Flask_logo.svg')}}" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Inicio de Sesi&oacute;n</h1>
+        <label for="usuario" class="sr-only">usuario</label>
+        <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Nombre de Usuario" minlength="6"
+            maxlength="20" required autofocus>
+        <br />
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" minlength="6"
+            maxlength="24" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar Sesi&oacute;n</button>
 
-    <!-- Bloque para mostrar mensajes con flash modulo de Flask que se importo en el archivo __init__  -->
-    {% with messages = get_flashed_messages(with_categories=True) %}<!-- Bloque que sirve para obtener los messages si hay los mostrara y si se le pasa el parametro with_categories=True le indicamos que si queremos que reconozca las categorias enviadas desde la ruta en __init__.py de login y logout  -->
-        {% if messages %}<!-- bloque if para validar si hay msjs  -->
-            <br/>
-            {% for category, message in messages %} <!--Bloque for para recorer los msjs de messages y las categorias que son pasadas en messages -->
-                {% if category=='warning' %}<!-- Si la categoria es igual a warning se va a mostrar en amarillo el msj -->
+        <!-- Bloque para mostrar mensajes con flash modulo de Flask que se importo en el archivo __init__  -->
+        {% with messages = get_flashed_messages(with_categories=True) %}<!-- Bloque que sirve para obtener los messages si hay los mostrara y si se le pasa el parametro with_categories=True le indicamos que si queremos que reconozca las categorias enviadas desde la ruta en __init__.py de login y logout  -->
+            {% if messages %}<!-- bloque if para validar si hay msjs  -->
+            <br />
+                {% for category, message in messages %}
+                    <!--Bloque for para recorer los msjs de messages y las categorias que son pasadas en messages -->
+                    {% if category=='warning' %}<!-- Si la categoria es igual a warning se va a mostrar en amarillo el msj -->
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <strong style="font-size: 14px;">{{ message }}</strong><!-- en esta etiqueta mandamos a imprimir el msj que se envia desde la ruta login  -->
+                        <strong style="font-size: 14px;">{{ message
+                            }}</strong><!-- en esta etiqueta mandamos a imprimir el msj que se envia desde la ruta login  -->
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                {% else %}<!-- este else es para cuando el cerrar sesion el logout se haga correctamente y el msj se mostrara en verde de exitoso -->
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong style="font-size: 14px;">{{ message }}</strong> <!-- en esta etiqueta mandamos a imprimir el msj que se envia desde la ruta logout  -->
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
-    <p class="mt-5 mb-3 text-muted">&copy; 2022-2023</p>
-</form>
-
-    {% block CustomJS %}<!-- Bloque para importar archivos .js este bloque me lo traigo de la plantilla base.html  -->
+                    {% else %}<!-- este else es para cuando el cerrar sesion el logout se haga correctamente y el msj se mostrara en verde de exitoso -->
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong style="font-size: 14px;">{{ message }}</strong>
+                        <!-- en esta etiqueta mandamos a imprimir el msj que se envia desde la ruta logout  -->
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <p class="mt-5 mb-3 text-muted">&copy; 2022-2023</p>
+    </form>
+    % block CustomJS %}<!-- Bloque para importar archivos .js este bloque me lo traigo de la plantilla base.html  -->
         <script src="{{url_for('static', filename='JS/login.js')}}"></script>
     {% endblock %}
-{% endblock %}

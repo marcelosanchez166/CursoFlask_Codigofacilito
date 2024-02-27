@@ -18,6 +18,7 @@ class DevelopmentConfig(Config):#clase que hereda de la clase Config y que activ
     MAIL_USE_TLS=True
     MAIL_USERNAME="marcelosanchez166@gmail.com"
     MAIL_PASSWORD=config("MAIL_PASSWORD")#Usando el metodo config de la libreria decouple para no poner la password como tal a nivel de codigo si no que se creara un archivo llamado .env para poner ese tipo de variables 
+    print(MAIL_PASSWORD)
 
 config={
     "development":DevelopmentConfig,

@@ -17,7 +17,7 @@ configuracion=config["development"]#La variable configuracion se le pasara a la 
 app=inicializar_app(configuracion)#Instancio la funcion inicializar app de la carpeta app
 manager=Manager(app)#Se crea un manejador y se le pasa la variable donde se guarda la instancia de inicializar_app como parametro
 
-manager.add_command('runserver', Server(host='127.0.0.1', port=5000))#Sobreescribiendo la configuracion del servidor para no ejecutar el comando runserver cuando ejecuto el archivo, Hay que importar Server que esta en flask_script
+manager.add_command('runserver', Server(host='0.0.0.0', port=5000))#Sobreescribiendo la configuracion del servidor para no ejecutar el comando runserver cuando ejecuto el archivo, Hay que importar Server que esta en flask_script
 
 if __name__ == '__main__':
     manager.run()

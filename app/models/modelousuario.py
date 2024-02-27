@@ -12,10 +12,12 @@ class ModeloUsuario():
                     Nombre_usuario = '{}'""".format(usuario.Nombre_usuario)#En el format se le pasa el atributo que recibe el metodo login y el atributo que recibe el construtor __init__ de la clase Usuario en el archivo usuario.py
             cursor.execute(sql)
             data=cursor.fetchone()#Usamos el metodo fecthone porque solo esperamos recibir un registro en este caso solo el usuario 
-            #print(data)
+            print("data que obtengo",data)
             #coincide=check_password_hash(data[2],usuario.password)#Aqui validamos que la posicion dos de la tupla coincida con la la clave que se le ingresa y es encriptada ademas se le pasa el atributo usuario del metodo login y el atributo del constructor de la clase Usuario en el archivo usuario.py
+            #print(data[2], "Imprimiendo la posicion 2 de la data de sql")
             if data != None:
                 coincide=Usuario.verificar_Password(data[2],usuario.password)
+                print(coincide,"Imprimiendo la variable coincide")
                 if coincide:#Si la variable coincide es verdadera 
                     usuario_logueado=Usuario(data[0],data[1],None,None)#Instanciamos la clase Usuario del archivo usuario.py y solo les pasamos los argumentos de las posiciones 0 y 1 que corresponden al id y al Nombre_usuario y la password y el tipo de usuario le ponemos None para no exponer esos campos
                     return usuario_logueado

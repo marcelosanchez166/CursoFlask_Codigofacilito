@@ -23,6 +23,9 @@ app=Flask(__name__)
 login_manager_app=LoginManager(app)#creamos una variable que hara uso de LoginManager y le pasamos la variable app que hace referencia a nuestra propia app, LoginManager sirve para poder crear un administrador para nuestra app 
 mail=Mail()
 
+print(mail, "Instancia de mail")
+
+
 #Existe un ataque a formularios que se llama CSRF(Cross-site Request Forgery) (Solicitud de Falsificacion entre sitios) 
 #que se enfoca en realizar peticiones al formulario que no son de nuestro sitio
 """Para evitar estos ataques podemos usar una herramienta que nos da Flask que se llama WTF que se instala con pip install Flask-WTF, con esto realizaremos es que cada 
@@ -30,11 +33,12 @@ vez que tengamos un formulario vamos a crear un token para identificarnos como l
 csrf=CSRFProtect()
 
 db=MySQL(app)#Declaro una variable que instanciara el conector de mysql y se le pasa la variable app que se creo para instanciar Flask(__name__) 
-#sobre la cual va a tener efecto para que se pueda conectar a mysql y se usara realizar conexiones atravez de los modelos los modelos seran unas clases que se van a crear nos 
+#sobre la cual va a tener efecto para que se pueda conectar a mysql y se usara realizar conexiones atravez de los modelos, los modelos seran unas clases que se van a crear nos 
 #permitira tener metodos para hacer CRUD registro de sesion etc que vamos a necesitar para conectarnos a una base
 
 @login_manager_app.user_loader #Se debe implementar para que se gestionen correctamente las sesiones atravez de la libreria flask_login Si no creamos el decorador login_manager_app dara este error Exception: Missing user_loader or request_loader. Refer to http://flask-login.readthedocs.io/#how-it-works for more info. cuando estemos usando login_user y Login_Manager de flask
 def load_user(id):#Se crear la funcion load_user y se le pasa el id que vamos a cargar del usuario
+    print(id, "Id desde la funcion load_user")
     return ModeloUsuario.obtener_por_id(db,id) #retornamos el metodo obtener_por_id de la clase ModeloUsuario del archivo modelousuario.py y se le pasaran dos valores la conexion a la base y el id que vamos a cargar del usuario
 
 
@@ -55,6 +59,7 @@ def login():
         usuario=Usuario(None,request.form['usuario'],request.form['password'],None) #Creamos la variable usuario para poder instanciar la clase Usuario que recibira los paramtros del formulario que esta en el archivo usuario.py el id del usuario y el tipo de usuario lo declaramos como None porque no nos siver dado que solo necesitamos las pass y el usuario
         #print(type(usuario))
         usuario_logueado=ModeloUsuario.login(db,usuario) #esta variable instanciara la clase ModeloUsuario y tendra lo que retorne modelousuario.py en el metodo de clase login que se encuentra en dicho archivo ademas se le pasara la conexion de la base y la variable usuario que tendra el usuario que recibamos como parametro en el formulario
+        print(usuario_logueado)
         if usuario_logueado != None:#si la varibale usuario_logueado es diferente None
             login_user(usuario_logueado)#Utilizando el modulo login_user de flask para poder loguear al usuario que se devuelve como inicio de sesion exitoso sirve para ver la sesion del usuario que se ha logueado
             flash(MENSAJE_BIENVENIDA,'success')#flash es un metodo de flask que sirve para enviar msjs en este caso lo ocuparemos para indicar cuando las credenciales son invalidas, hay que importar flash de Flask, pero para que se muestren dichos msjs hay que indicar que se muestren en la plantilla correspondiente en este caso la plantilla login.html se le pasa otro parametro para identificar la categoria como segundo parametro el valor que success para indicar que todo ha ido bien 
